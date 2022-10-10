@@ -1,27 +1,24 @@
 {
-  "name": "mocha-junit-reporter",
+  "name": "@vpavlik62/vpavlik-cypress-junit-reporter",
   "version": "2.1.0",
-  "description": "A JUnit reporter for mocha.",
+  "description": "A JUnit reporter for cypess.",
   "main": "index.js",
   "scripts": {
     "ci": "npm run lint && npm run test",
-    "lint": "./node_modules/.bin/eslint '*.js' 'test/**/*.js'",
+    "lint": "eslint '*.js' 'test/**/*.js'",
     "test": "MOCHA_FILE=test/mocha.xml node_modules/.bin/mocha test --reporter=spec",
     "tdd": "MOCHA_FILE=test/mocha.xml node_modules/.bin/mocha test --reporter=min --watch"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/michaelleeallen/mocha-junit-reporter"
+    "url": "git+https://github.com/vpavlik62/vpavlik-cypress-junit-reporter.git"
   },
   "keywords": [
-    "mocha",
+    "cypress",
     "junit",
     "reporter"
   ],
-  "author": {
-    "name": "Michael Allen",
-    "email": "michael.lee.allen@gmail.com"
-  },
+  "author": "Vit Pavlik <vitpavlik62@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@sinonjs/fake-timers": "^6.0.1",
@@ -50,5 +47,12 @@
   },
   "peerDependencies": {
     "mocha": ">=2.2.5"
+  },
+  "bugs": {
+    "url": "https://github.com/vpavlik62/vpavlik-cypresss-junit-reporter/issues"
+  },
+  "homepage": "https://github.com/vpavlik62/vpavlik-cypresss-junit-reporter",
+  "directories": {
+    "test": "test"
   }
 }
