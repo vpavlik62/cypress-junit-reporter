@@ -1,6 +1,6 @@
 {
   "name": "@vpavlik62/vpavlik-cypress-junit-reporter",
-  "version": "2.1.0",
+  "version": "1.0.0",
   "description": "A JUnit reporter for cypess.",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,7 @@
     "tdd": "MOCHA_FILE=test/mocha.xml node_modules/.bin/mocha test --reporter=min --watch"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vpavlik62/vpavlik-cypress-junit-reporter.git"
+    "url": "https://github.com/vpavlik62/vpavlik-cypress-junit-reporter.git"
   },
   "keywords": [
     "cypress",

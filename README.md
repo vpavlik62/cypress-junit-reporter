@@ -1,4 +1,4 @@
-# JUnit Reporter for Mocha
+# JUnit Reporter for Cypress 
 
 [![Build Status][travis-badge]][travis-build]
 [![npm][npm-badge]][npm-listing]
@@ -8,12 +8,12 @@ Produces JUnit-style XML test results.
 ## Installation
 
 ```shell
-$ npm install mocha-junit-reporter --save-dev
+$ npm install @vpavlik62/vpavlik-cypress-junit-reporter --save-dev
 ```
 
 or as a global module
 ```shell
-$ npm install -g mocha-junit-reporter
+$ npm install -g @vpavlik62/vpavlik-cypress-junit-reporter
 ```
 
 ## Usage
