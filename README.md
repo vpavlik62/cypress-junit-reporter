@@ -6,6 +6,7 @@
 Produces JUnit-style XML test results.
 
 ## Installation
+Is compatible with cypress version >= 10.
 
 ```shell
 $ npm install @vpavlik62/vpavlik-cypress-junit-reporter --save-dev
@@ -116,10 +117,10 @@ The JUnit format defines a pair of tags - `<system-out/>` and `<system-err/>` - 
 and error streams, respectively. It is possible to pass the test outputs/errors as an array of text lines:
 ```js
 it ('should report output', function () {
-  this.test.consoleOutputs = [ 'line 1 of output', 'line 2 of output' ];
+  this.test._testConfig.consoleOutputs = [ 'line 1 of output', 'line 2 of output' ];
 });
 it ('should report error', function () {
-  this.test.consoleErrors = [ 'line 1 of errors', 'line 2 of errors' ];
+  this.test._testConfig.consoleErrors = [ 'line 1 of errors', 'line 2 of errors' ];
 });
 ```
 
@@ -139,11 +140,11 @@ describe('my console tests', function () {
     var currentTest = this.currentTest;
     console.log = function captureLog() {
       var formattedMessage = util.format.apply(util, arguments);
-      currentTest.consoleOutputs = (currentTest.consoleOutputs || []).concat(formattedMessage);
+      currentTest._testConfig.consoleOutputs = (currentTest._testConfig.consoleOutputs || []).concat(formattedMessage);
     };
     console.error = function captureError() {
       var formattedMessage = util.format.apply(util, arguments);
-      currentTest.consoleErrors = (currentTest.consoleErrors || []).concat(formattedMessage);
+      currentTest._testConfig.consoleErrors = (currentTest._testConfig.consoleErrors || []).concat(formattedMessage);
     };
   });
   afterEach(function _restoreConsoleFunctions() {
@@ -162,10 +163,11 @@ Remember to run with `--reporter-options outputs=true` if you want test outputs 
 ### Attachments
 enabling the `attachments` configuration option will allow for attaching files and screenshots in [JUnit Attachments Plugin](https://wiki.jenkins.io/display/JENKINS/JUnit+Attachments+Plugin) format.
 
-Attachment path can be injected into the test object
+Attachment path can be injected into the test object (testConfig is the only property that is not cleared of unverified
+attributes by cypress)
 ```js
 it ('should include attachment', function () {
-  this.test.attachments = ['/absolut/path/to/file.png'];
+  this.test._testConfig.attachments = ['/absolut/path/to/file.png'];
 });
 ```
 
@@ -196,6 +198,7 @@ output line 2
 | antHostname                    | `process.env.HOSTNAME` | hostname to use when running in `antMode`  will default to environment `HOSTNAME`                                       |
 | jenkinsMode                    | `false`                | if set to truthy value will return xml that will display nice results in Jenkins                                        |
 | jenkinsClassnamePrefix         | `undefined`            | adds a prefix to a classname when running  in `jenkinsMode`                                                             |
+| includeSpecFile                | `false`                | set to truthy value to include spec file (with relative path) in test name                                              |
 
 [travis-badge]: https://travis-ci.org/michaelleeallen/mocha-junit-reporter.svg?branch=master
 [travis-build]: https://travis-ci.org/michaelleeallen/mocha-junit-reporter
