@@ -5,7 +5,7 @@
 
 Produces JUnit-style XML test results.
 
-The main reason for this fork is to enable options like 'attachments', 'consoleOutputs' and other in cypress. Which does
+The main reason for this fork is to enable options like 'attachments', 'consoleOutputs' and other in cypress, which does
 not work in cypress with base 'mocha-junit-reporter';
 
 ## Installation
