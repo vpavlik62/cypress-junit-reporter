@@ -1,6 +1,6 @@
 {
   "name": "@vpavlik62/vpavlik-cypress-junit-reporter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A JUnit reporter for cypess.",
   "main": "index.js",
   "scripts": {
