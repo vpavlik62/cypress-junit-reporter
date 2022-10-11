@@ -1,7 +1,7 @@
 {
-  "name": "@vpavlik62/vpavlik-cypress-junit-reporter",
-  "version": "1.0.1",
-  "description": "A JUnit reporter for cypess.",
+  "name": "@vpavlik62/cypress-junit-reporter",
+  "version": "1.0.2",
+  "description": "A JUnit reporter for cypress.",
   "main": "index.js",
   "scripts": {
     "ci": "npm run lint && npm run test",
@@ -10,7 +10,7 @@
     "tdd": "MOCHA_FILE=test/mocha.xml node_modules/.bin/mocha test --reporter=min --watch"
   },
   "repository": {
-    "url": "https://github.com/vpavlik62/vpavlik-cypress-junit-reporter.git"
+    "url": "https://github.com/vpavlik62/cypress-junit-reporter.git"
   },
   "keywords": [
     "cypress",
@@ -48,9 +48,9 @@
     "mocha": ">=2.2.5"
   },
   "bugs": {
-    "url": "https://github.com/vpavlik62/vpavlik-cypress-junit-reporter/issues"
+    "url": "https://github.com/vpavlik62/cypress-junit-reporter/issues"
   },
-  "homepage": "https://github.com/vpavlik62/vpavlik-cypress-junit-reporter",
+  "homepage": "https://github.com/vpavlik62/cypress-junit-reporter",
   "directories": {
     "test": "test"
   },

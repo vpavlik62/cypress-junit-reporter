@@ -4,7 +4,7 @@ var xml = require('xml');
 var Base = require('mocha').reporters.Base;
 var fs = require('fs');
 var path = require('path');
-var debug = require('debug')('mocha-junit-reporter');
+var debug = require('debug')('cypress-junit-reporter');
 var mkdirp = require('mkdirp');
 var md5 = require('md5');
 var stripAnsi = require('strip-ansi');
@@ -239,6 +239,8 @@ function MochaJUnitReporter(runner, options) {
     var testsuites = [];
     this._testsuites = testsuites;
 
+    var currentError = null;
+
     function lastSuite() {
         return testsuites[testsuites.length - 1].testsuite;
     }
@@ -280,22 +282,27 @@ function MochaJUnitReporter(runner, options) {
         return this._onSuiteEnd(suite);
     }.bind(this));
 
-    this._runner.on('pass', function (test) {
-        lastSuite().push(this.getTestcaseData(test));
-    }.bind(this));
+    // it is necessary to use "end" events instead of "pass" "fail", because
+    // we need to access modified _testConfig, which is available only after hook or test end
+    this._runner.on('test end', function (test) {
+        var isInclude = !test.pending || this._options.includePending;
 
-    this._runner.on('fail', function (test, err) {
-        lastSuite().push(this.getTestcaseData(test, err));
-    }.bind(this));
-
-    if (this._options.includePending) {
-        this._runner.on('pending', function (test) {
+        if (isInclude) {
             var testcase = this.getTestcaseData(test);
 
-            testcase.testcase.push({ skipped: null });
+            if (test.pending) {
+                testcase.testcase.push({ skipped: null });
+            }
+
             lastSuite().push(testcase);
-        }.bind(this));
-    }
+        }
+    }.bind(this));;
+
+    this._runner.on('fail', function (test) {
+        if (test.type === "hook") {
+            lastSuite().push(this.getTestcaseData(test));
+        }
+    }.bind(this));
 
     this._runner.on('end', function () {
         this.flush(testsuites);
@@ -346,11 +353,11 @@ MochaJUnitReporter.prototype.getTestsuiteData = function (suite) {
  * @param {object} err - if test failed, the failure object
  * @returns {object}
  */
-MochaJUnitReporter.prototype.getTestcaseData = function (test, err) {
+MochaJUnitReporter.prototype.getTestcaseData = function (test) {
     var jenkinsMode = this._options.jenkinsMode;
     var flipClassAndName = this._options.testCaseSwitchClassnameAndName;
     var includeSpecFile = this._options.includeSpecFile;
-    var name = stripAnsi(jenkinsMode ? getJenkinsClassname(test, this._options) : test.fullTitle());
+    var name = stripAnsi(jenkinsMode ? getJenkinsClassname(test, this._options) : test.titlePath().join(this._options.suiteTitleSeparatedBy));
     var classname = stripAnsi(test.title);
     var specFilePath = getSpecFile(test);
     var testcase = {
@@ -385,7 +392,8 @@ MochaJUnitReporter.prototype.getTestcaseData = function (test, err) {
         testcase.testcase.push({ 'system-err': this.removeInvalidCharacters(stripAnsi(testConfig.consoleErrors.join('\n'))) });
     }
 
-    if (err) {
+    if (test.err && !test.pending) {
+        var err = test.err;
         var message;
         if (err.message && typeof err.message.toString === 'function') {
             message = err.message + '';

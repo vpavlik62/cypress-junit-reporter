@@ -5,43 +5,62 @@
 
 Produces JUnit-style XML test results.
 
+The main reason for this fork is to enable options like 'attachments', 'consoleOutputs' and other in cypress. Which does
+not work in cypress with base 'mocha-junit-reporter';
+
 ## Installation
 Is compatible with cypress version >= 10.
 
 ```shell
-$ npm install @vpavlik62/vpavlik-cypress-junit-reporter --save-dev
+$ npm install @vpavlik62/cypress-junit-reporter --save-dev
 ```
 
 or as a global module
 ```shell
-$ npm install -g @vpavlik62/vpavlik-cypress-junit-reporter
+$ npm install -g @vpavlik62/cypress-junit-reporter
 ```
 
 ## Usage
-Run mocha with `mocha-junit-reporter`:
-
-```shell
-$ mocha test --reporter mocha-junit-reporter
-```
-This will output a results file at `./test-results.xml`.
-You may optionally declare an alternate location for results XML file by setting
-the environment variable `MOCHA_FILE` or specifying `mochaFile` in `reporterOptions`:
-
-```shell
-$ MOCHA_FILE=./path_to_your/file.xml mocha test --reporter mocha-junit-reporter
-```
-or
-```shell
-$ mocha test --reporter mocha-junit-reporter --reporter-options mochaFile=./path_to_your/file.xml
-```
-or
+Cypress configuration:
 ```javascript
-var mocha = new Mocha({
-    reporter: 'mocha-junit-reporter',
-    reporterOptions: {
-        mochaFile: './path_to_your/file.xml'
+const { defineConfig } = require('cypress')
+
+module.exports = defineConfig({
+  reporter: '@vpavlik62/cypress-junit-reporter',
+  reporterOptions: {
+    mochaFile: 'results/my-test-output.[hash].xml',
+    toConsole: true
+  }
+})
+```
+or with `cypress-multi-reporters`
+```javascript
+const { defineConfig } = require('cypress')
+
+module.exports = defineConfig({
+  reporter: 'cypress-multi-reporters',
+  reporterOptions: {
+    configFile: 'reporter-config.json'
+  }
+})
+```
+
+having `reporter-config.json`
+```json
+{
+    "reporterEnabled": "spec, @vpavlik62/cypress-junit-reporter",
+    "vpavlik62CypressJunitReporterReporterOptions": {
+        "mochaFile": "results/test-output.[hash].xml",
+        "toConsole": true
     }
-});
+}
+```
+
+### Debug
+
+To see debug log set env variable:
+```shell
+DEBUG='cypress-junit-reporter'
 ```
 
 ### Append properties to testsuite
@@ -63,12 +82,14 @@ You can also add properties to the report under `testsuite`. This is useful if y
 
 To do so pass them in via env variable:
 ```shell
-PROPERTIES=BUILD_ID:4291 mocha test --reporter mocha-junit-reporter
+PROPERTIES=BUILD_ID:4291
 ```
 or
 ```javascript
-var mocha = new Mocha({
-    reporter: 'mocha-junit-reporter',
+const { defineConfig } = require('cypress')
+
+module.exports = defineConfig({{
+    reporter: '@vpavlik62/cypress-junit-reporter',
     reporterOptions: {
         properties: {
             BUILD_ID: 4291
@@ -83,8 +104,10 @@ Results XML filename can contain `[hash]`, e.g. `./path_to_your/test-results.[ha
 
 In order to display full suite title (including parents) just specify `testsuitesTitle` option
 ```javascript
-var mocha = new Mocha({
-    reporter: 'mocha-junit-reporter',
+const { defineConfig } = require('cypress')
+
+module.exports = defineConfig({{
+    reporter: '@vpavlik62/cypress-junit-reporter',
     reporterOptions: {
         testsuitesTitle: true,
         suiteTitleSeparatedBy: '.' // suites separator, default is space (' '), or period ('.') in jenkins mode
@@ -95,8 +118,10 @@ var mocha = new Mocha({
 If you want to **switch classname and name** of the generated testCase XML entries, you can use the `testCaseSwitchClassnameAndName` reporter option.
 
 ```javascript
-var mocha = new Mocha({
-    reporter: 'mocha-junit-reporter',
+const { defineConfig } = require('cypress')
+
+module.exports = defineConfig({{
+    reporter: '@vpavlik62/cypress-junit-reporter',
     reporterOptions: {
         testCaseSwitchClassnameAndName: true
     }

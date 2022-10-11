@@ -675,22 +675,22 @@ describe('mocha-junit-reporter', function () {
             tests: "1",
             failures: "0",
             time: "0.004",
-            fullTitle: function () {
-                return 'Super Suite ' + this.title;
+            titlePath: function () {
+                return ['Super Suite', this.title];
             }
         };
 
         it('should generate valid testCase for testCaseSwitchClassnameAndName default', function () {
             var reporter = createReporter();
             var testCase = reporter.getTestcaseData(mockedTestCase);
-            expect(testCase.testcase[0]._attr.name).to.equal(mockedTestCase.fullTitle());
+            expect(testCase.testcase[0]._attr.name).to.equal(mockedTestCase.titlePath().join(" "));
             expect(testCase.testcase[0]._attr.classname).to.equal(mockedTestCase.title);
         });
 
         it('should generate valid testCase for testCaseSwitchClassnameAndName=false', function () {
             var reporter = createReporter({ testCaseSwitchClassnameAndName: false });
             var testCase = reporter.getTestcaseData(mockedTestCase);
-            expect(testCase.testcase[0]._attr.name).to.equal(mockedTestCase.fullTitle());
+            expect(testCase.testcase[0]._attr.name).to.equal(mockedTestCase.titlePath().join(" "));
             expect(testCase.testcase[0]._attr.classname).to.equal(mockedTestCase.title);
         });
 
@@ -698,7 +698,7 @@ describe('mocha-junit-reporter', function () {
             var reporter = createReporter({ testCaseSwitchClassnameAndName: true });
             var testCase = reporter.getTestcaseData(mockedTestCase);
             expect(testCase.testcase[0]._attr.name).to.equal(mockedTestCase.title);
-            expect(testCase.testcase[0]._attr.classname).to.equal(mockedTestCase.fullTitle());
+            expect(testCase.testcase[0]._attr.classname).to.equal(mockedTestCase.titlePath().join(" "));
         });
     });
 
