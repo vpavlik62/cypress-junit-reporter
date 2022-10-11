@@ -56,6 +56,22 @@ having `reporter-config.json`
 }
 ```
 
+### Typescript
+
+To avoid typescript errors, put this inside your `globa.d.ts`:
+
+```javascript
+declare namespace Cypress {
+
+    // specify additional properties in the TestConfig object
+    interface TestConfigOverrides {
+        attachments?: string[];
+        consoleOutputs?: string[];
+        consoleErrors?: string[];
+    }
+}
+```
+
 ### Debug
 
 To see debug log set env variable:
